@@ -21,7 +21,7 @@ namespace WordCount
         {
             var regex = new Regex(wordRegEx);
             var words = regex.Split(line).ToList();
-            words.Remove("");
+            words.Remove(string.Empty);
             return words;
         }
 
@@ -52,7 +52,7 @@ namespace WordCount
 
             if (args == null || args.Count() == 0)
             {
-                Console.WriteLine("Please specify the file name to process.");
+                Console.WriteLine("Please specify the file name to process. Optionally a regular expression can be provided as second argument to select words");
                 return (1);
             }
             string filePath = args[0];
@@ -61,6 +61,20 @@ namespace WordCount
                 Console.WriteLine($"{filePath} doesn't exists");
                 return (2);
             }
+            if (args.Count() == 2)
+            {
+               WordRegEx = args[1];
+                try
+                {
+                   var regex = new Regex(WordRegEx);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"regex {WordRegEx} is invalid. {e.Message}");
+                    return 3;
+                }
+            }
+
             var text = GetText(filePath);
             var result = GetUniqueWords(text,WordRegEx);
             return (0);
